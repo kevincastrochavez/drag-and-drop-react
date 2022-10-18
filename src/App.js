@@ -1,5 +1,6 @@
 import './App.css';
 import styled from 'styled-components';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import data from './initialData';
 import Task from './Task';
@@ -7,16 +8,32 @@ import Task from './Task';
 function App() {
   const { roomates } = data;
 
+  const onDragEnd = () => {
+    console.log('Something happened');
+  };
+
   return (
     <div className='App'>
-      <Container>
-        <Title>To Do</Title>
-        <TaskList>
-          {roomates.map((roomate) => (
-            <Task key={roomate.id} roomateName={roomate.name} />
-          ))}
-        </TaskList>
-      </Container>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Container>
+          <Title>To Do</Title>
+
+          <Droppable droppableId='1'>
+            {(provided) => (
+              <TaskList ref={provided.innerRef} {...provided.droppableProps}>
+                {roomates.map((roomate, index) => (
+                  <Task
+                    roomateName={roomate.name}
+                    id={`${roomate.id}`}
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+              </TaskList>
+            )}
+          </Droppable>
+        </Container>
+      </DragDropContext>
     </div>
   );
 }

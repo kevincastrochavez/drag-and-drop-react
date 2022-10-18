@@ -1,13 +1,22 @@
 import styled from 'styled-components';
 import React from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 
-function Task({ roomateName }) {
-  console.log(roomateName);
+function Task({ roomateName, id, index }) {
+  console.log(id);
 
   return (
-    <div>
-      <Container>{roomateName}</Container>
-    </div>
+    <Draggable draggableId={`${id}`} index={index}>
+      {(provided) => (
+        <Container
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          {roomateName}
+        </Container>
+      )}
+    </Draggable>
   );
 }
 
